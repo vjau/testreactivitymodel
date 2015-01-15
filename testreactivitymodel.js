@@ -41,11 +41,13 @@ if (Meteor.isClient) {
       } else {
         ppoolinstance = this;
         this._players = {};
+        this._dep = new Tracker.Dependency();
       }
   };
 
   //get Object from the pool by id
   PlayersPool.prototype.getPlayer = function(id){
+    this._dep.depend();
     return this._players[id];
   };
 
@@ -53,6 +55,7 @@ if (Meteor.isClient) {
   PlayersPool.prototype.setPlayer = function(player){
     if (player && player.id){
       this._players[player.id]= player;
+      this._dep.changed();
     }
   };
 
